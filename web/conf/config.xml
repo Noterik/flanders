@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Config for Flanders (the meta-data extraction service)</comment>
+	<entry key="mplayer-path">/usr/bin</entry>
+	<entry key="rtmpdump-path">/usr/bin</entry>
+</properties>

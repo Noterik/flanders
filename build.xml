@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<project name="flanders" default="deploy-war">
+	<!-- maak env variabele-->
+	<property environment="env" />
+	<property name="src.dir" value="src"/>
+	<property name="build.dir" value="build"/>
+	<property name="doc.dir" value="doc"/>
+	<property name="lib.dir" value="lib"/>
+    <property name="classes.dir" value="bin"/>
+	<property name="web.dir" value="web"/>
+	<property name="war.dir" value="war"/>
+
+	<!-- create the classpath -->
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="*.jar"/>
+	</path>
+
+	<target name="init">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${war.dir}" />
+		<mkdir dir="${classes.dir}" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete dir="${war.dir}" />
+		<delete dir="${classes.dir}" />
+	</target>
+
+	<target name="compile" depends="init">
+	  <javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on">
+	    <classpath>
+	        <path refid="classpath"/>
+	    </classpath>
+	  </javac>
+	</target>
+
+	<target name="build" depends="clean,compile">
+		<delete file="${build.dir}/noterik-flanders.jar"/>
+		<jar jarfile="${build.dir}/noterik-flanders.jar" basedir="${classes.dir}">
+			<manifest>
+				<attribute name="Built-By" value="Noterik B.V."/>
+			   	<attribute name="Main-Class" value="com.noterik.bart.flanders.restlet.FlandersRestletApplication"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="deploy-war" depends="build">
+		<copy todir="${web.dir}/WEB-INF/lib/">
+			<fileset dir="${build.dir}">
+				<include name="noterik-flanders.jar"/>
+			</fileset>
+		</copy>
+		<war destfile="${war.dir}/flanders.war" webxml="${web.dir}/WEB-INF/web.xml">
+			<lib dir="${lib.dir}">
+				<exclude name="servlet.jar"/>
+				<exclude name="dom4j-1.6.1.jar"/>
+				<exclude name="jaxen-1.1.1.jar"/>
+				<exclude name="log4j-1.2.14.jar"/>
+				<exclude name="org.apache.commons.codec.jar"/>
+				<exclude name="org.apache.commons.httpclient.jar"/>
+				<exclude name="org.apache.commons.logging.jar"/>
+				<exclude name="org.restlet.jar" />
+				<exclude name="com.noelios.restlet.jar"/>
+				<exclude name="com.noelios.restlet.ext.servlet_2.4.jar"/>
+			</lib>
+			<lib dir="${build.dir}" />
+			<fileset dir="${web.dir}">
+			</fileset>
+		</war>
+	</target>
+
+	<target name="deploy-local" depends="build">
+		<copy todir="${web.dir}/WEB-INF/lib/">
+			<fileset dir="${build.dir}">
+				<include name="noterik-flanders.jar"/>
+			</fileset>
+			<fileset dir="${lib.dir}">
+				<exclude name="servlet.jar"/>
+			</fileset>
+		</copy>
+	</target>
+
+</project>
