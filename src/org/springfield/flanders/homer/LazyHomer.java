@@ -209,6 +209,7 @@ public class LazyHomer implements MargeObserver {
 						} else {
 							// so we have a name (verified) return true
 							iamok = true;
+							smithers.put("/domain/internal/service/flanders/nodes/"+ipnumber+"/properties/port", ""+port, "text/xml");
 						}
 					}
 				}	
@@ -232,6 +233,7 @@ public class LazyHomer implements MargeObserver {
 		        	newbody+="<status>off</status>";
 		        	newbody+="<activesmithers>"+selectedsmithers.getIpNumber()+"</activesmithers>";
 		        	newbody+="<lastseen>"+new Date().getTime()+"</lastseen>";
+		        	newbody+="<port>"+port+"</port>";
 		        	newbody+="<preferedsmithers>"+myip+"</preferedsmithers>";
 		        	if (isWindows()) {
 		        		newbody+="<defaultloglevel>info</defaultloglevel>";
