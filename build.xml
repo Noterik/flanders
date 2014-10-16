@@ -40,7 +40,7 @@
 		<jar jarfile="${build.dir}/noterik-flanders.jar" basedir="${classes.dir}">
 			<manifest>
 				<attribute name="Built-By" value="Noterik B.V."/>
-			   	<attribute name="Main-Class" value="com.noterik.bart.flanders.restlet.FlandersRestletApplication"/>
+			   	<attribute name="Main-Class" value="org.springfield.flanders.restlet.FlandersRestletApplication"/>
 			</manifest>
 		</jar>
 	</target>
@@ -53,16 +53,19 @@
 		</copy>
 		<war destfile="${war.dir}/flanders.war" webxml="${web.dir}/WEB-INF/web.xml">
 			<lib dir="${lib.dir}">
-				<exclude name="servlet.jar"/>
+				<exclude name="com.noelios.restlet.ext.httpclient_3.1.jar"/>
+				<exclude name="com.noelios.restlet.ext.net.jar"/>
+				<exclude name="com.noelios.restlet.ext.servlet_2.4.jar"/>
+				<exclude name="com.noelios.restlet.jar"/>
 				<exclude name="dom4j-1.6.1.jar"/>
 				<exclude name="jaxen-1.1.1.jar"/>
 				<exclude name="log4j-1.2.14.jar"/>
+				<exclude name="mojo.jar"/>
 				<exclude name="org.apache.commons.codec.jar"/>
 				<exclude name="org.apache.commons.httpclient.jar"/>
 				<exclude name="org.apache.commons.logging.jar"/>
 				<exclude name="org.restlet.jar" />
-				<exclude name="com.noelios.restlet.jar"/>
-				<exclude name="com.noelios.restlet.ext.servlet_2.4.jar"/>
+				<exclude name="servlet.jar"/>
 			</lib>
 			<lib dir="${build.dir}" />
 			<fileset dir="${web.dir}">

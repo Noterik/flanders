@@ -14,7 +14,7 @@
 
 	<context-param>
 		<param-name>org.restlet.application</param-name>
-		<param-value>com.noterik.bart.flanders.restlet.FlandersApplication</param-value>
+		<param-value>org.springfield.flanders.restlet.FlandersApplication</param-value>
 	</context-param>
 
 	<servlet>
