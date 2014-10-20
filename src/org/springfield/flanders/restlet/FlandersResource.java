@@ -116,11 +116,10 @@ public class FlandersResource extends Resource {
 			String filename = node.valueOf("file");
 			String mjpegIndex = node.valueOf("index");
 			
-			if (mjpegIndex!=null && mount!=null && source!=null) {
+			if (mjpegIndex!=null && mjpegIndex.equals("true") && mount!=null && source!=null) {
 				MountProperties mp = LazyHomer.getMountProperties(mount);
-				if (mp != null) {
-					source = mp.getPath() + source;					
-					String response = MjpegIndexer.extractMetaData(source, mount);
+				if (mp != null) {		
+					String response = MjpegIndexer.extractMetaData(source, mp.getPath());
 					getResponse().setEntity(new StringRepresentation(response));
 				} else {
 					getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);

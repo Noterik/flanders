@@ -39,7 +39,7 @@ import org.springfield.flanders.tools.HttpHelper;
 public class MjpegIndexer {
 	private static Logger LOG = Logger.getLogger(MjpegIndexer.class);
 	
-	public static String extractMetaData(String source, String mount) {
+	public static String extractMetaData(String source, String mountPath) {
 		FlandersProperties fp = LazyHomer.getMyFlandersProperties();
 		
 		if (source == null) {
@@ -53,15 +53,15 @@ public class MjpegIndexer {
     	String arg3 = null;
 		String metadataFile = buildFileName(source);	
 		cmd = fp.getMjpegIndexPath();
-		arg1 = source.replace("\n", "");
-		arg2 = metadataFile.replace("\n", "");		
+		arg1 = mountPath + source.replace("\n", "");
+		arg2 = mountPath + metadataFile.replace("\n", "");		
 		LOG.debug("Command is: ");		
 		LOG.debug(cmd + " " + arg1 + " " + arg2);			
 		if (source != null && !source.equals("") && metadataFile != null && !metadataFile.equals("")) {
 			LOG.debug("-- ABOUT TO RUN THE COMMAND --");
 			commandRunner(cmd, arg1, arg2);			
 			LOG.debug("-- FINISHED WITH THE COMMAND --");
-			return "<index>"+metadataFile+"</index>";			
+			return "<index><json>"+metadataFile+"</json></index>";			
 		} else {
 			return HttpHelper.getErrorMessageAsString("500", "Could not construct the command for mplayer",
 					"ERROR: could not construct the command for mplayer",
