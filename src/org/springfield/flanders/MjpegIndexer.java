@@ -52,7 +52,8 @@ public class MjpegIndexer {
     	String arg2 = null;
     	String arg3 = null;
 		String metadataFile = buildFileName(source);	
-		cmd = fp.getMjpegIndexPath();
+		//cmd = fp.getMjpegIndexPath();
+		cmd = "/springfield/flanders/bin/mjpeg_index";
 		arg1 = mountPath + source.replace("\n", "");
 		arg2 = mountPath + metadataFile.replace("\n", "");		
 		LOG.debug("Command is: ");		
