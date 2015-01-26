@@ -126,8 +126,10 @@ public class FlandersResource extends Resource {
 					getResponse().setEntity("<status>Error: internal mount properties not found</status>", MediaType.TEXT_XML);
 				}
 			} else if(source!=null && mount!=null) {
-				MountProperties mp = LazyHomer.getMountProperties(mount);
-				source = mp.getPath() + source;				
+				if (!mount.equals("")) {
+					MountProperties mp = LazyHomer.getMountProperties(mount);
+					source = mp.getPath() + source;	
+				}
 				String ext = FileHelper.getFileExtension(source);
 				if(ext != null){
 					String response = MPlayerMetaDataExtractor.extractMetaData(source);
