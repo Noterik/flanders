@@ -20,6 +20,7 @@
 */
 package org.springfield.flanders.restlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
@@ -43,12 +44,19 @@ import org.springfield.flanders.RtmpdumpMetadataExtractor;
 import org.springfield.flanders.homer.LazyHomer;
 import org.springfield.flanders.homer.MountProperties;
 import org.springfield.flanders.tools.FileHelper;
+import org.springfield.mojo.ftp.FtpHelper;
 
 
 public class FlandersResource extends Resource {
 
 	private static Logger log = Logger.getLogger(FlandersResource.class);
 
+	/** Number of times to retry FTP */
+	public static final int NUM_RETRIES = 10;
+	
+	/** Time (milliseconds) to wait between tries */
+	public static final long TIME_TO_WAIT = 5000;
+	
 	// the decimal format is used to parse the interval value of the request xml
 	private static DecimalFormat df = new DecimalFormat("#.####");
 
@@ -128,7 +136,17 @@ public class FlandersResource extends Resource {
 			} else if(source!=null && mount!=null) {
 				if (!mount.equals("")) {
 					MountProperties mp = LazyHomer.getMountProperties(mount);
-					source = mp.getPath() + source;	
+					if (mp.getProtocol().equals("file")) {
+						source = mp.getPath() + source;	
+					} else if (mp.getProtocol().equals("ftp")) {
+						/** get the video file from streaming machines to the the flanders server */	
+						String fileName = source.substring(source.lastIndexOf("/")+1);
+						String rawUri = source.substring(0,source.lastIndexOf("/"));
+						String vidUri = rawUri.substring(0, rawUri.lastIndexOf("/rawvideo/")+1);
+						if(getVideoByFtp(mp.getHostname(), mp.getAccount(), mp.getPassword(), fileName, mp.getPath(), rawUri, vidUri)){
+							source = mp.getPath()+vidUri+File.separator+fileName;
+						}
+					}
 				}
 				String ext = FileHelper.getFileExtension(source);
 				if(ext != null){
@@ -147,5 +165,38 @@ public class FlandersResource extends Resource {
 			}
 		}
 	}
+	
+	/**
+	 * This function copies the video file from the streaming machine into the flanders server where the metadata
+	 * is extracted.
+	 * 
+	 * @param server
+	 * @param fileName
+	 * @param mount
+	 * @param rawUri
+	 * @param vidUri
+	 * @return
+	 */
+	 private boolean getVideoByFtp(String server, String username, String password, String fileName, String mount, String rawUri, String vidUri){
+		 String rFolder = rawUri;
+		 String lFolder = mount + vidUri;
+		 
+		 // retry on failure
+		 boolean success = false;
+		 for(int i=0; i<NUM_RETRIES; i++) {
+			 System.out.println("server "+server+" user "+username+" password "+password+" remote folder "+rFolder+" filename "+fileName);
+			 success = FtpHelper.commonsGetFile(server, username, password, rFolder, lFolder, fileName);
+			 if(success) {
+				 break;
+			 }
+			 log.error("FTP failed ("+(i+1)+"), retrying ... ");
+			 try {
+				Thread.sleep(TIME_TO_WAIT);
+			} catch (InterruptedException e) {}
+		 }
+		 
+		 // FTP
+		 return success;
+	 }
 
 }

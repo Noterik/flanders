@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="lib/org.apache.commons.codec.jar"/>
 	<classpathentry kind="lib" path="lib/mojo.jar"/>
+	<classpathentry kind="lib" path="lib/commons-net-1.4.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
