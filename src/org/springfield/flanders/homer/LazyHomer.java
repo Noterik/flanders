@@ -437,8 +437,8 @@ public class LazyHomer implements MargeObserver {
 		}
 		
 		Level logLevel = Level.INFO;
-		LOG.getRootLogger().setLevel(Level.OFF);
-		LOG.getLogger(PACKAGE_ROOT).setLevel(logLevel);
+		Logger.getRootLogger().setLevel(Level.OFF);
+		Logger.getLogger(PACKAGE_ROOT).setLevel(logLevel);
 		LOG.info("logging level: " + logLevel);
 		
 		LOG.info("Initializing logging done.");
@@ -446,7 +446,7 @@ public class LazyHomer implements MargeObserver {
     
     private static void setLogLevel(String level) {
 		Level logLevel = Level.INFO;
-		Level oldlevel = LOG.getLogger(PACKAGE_ROOT).getLevel();
+		Level oldlevel = Logger.getLogger(PACKAGE_ROOT).getLevel();
 		switch (loglevels.valueOf(level)) {
 			case all : logLevel = Level.ALL;break;
 			case info : logLevel = Level.INFO;break;
@@ -458,7 +458,7 @@ public class LazyHomer implements MargeObserver {
 			case off: logLevel = Level.OFF;break;
 		}
 		if (logLevel.toInt()!=oldlevel.toInt()) {
-			LOG.getLogger(PACKAGE_ROOT).setLevel(logLevel);
+			Logger.getLogger(PACKAGE_ROOT).setLevel(logLevel);
 			LOG.info("logging level: " + logLevel);
 		}
 	}
