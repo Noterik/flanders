@@ -229,7 +229,8 @@ public class LazyHomer implements MargeObserver {
 						System.out.println("LazyHomer : "+e.getMessage());
 					}
 					
-					String newbody = "<fsxml>";
+					String newbody = "<fsxml><properties>";
+					newbody+="<info>Metadata Extraction nodes</info></properties>";
 		        	newbody+="<nodes id=\""+myip+"\"><properties>";
 		        	newbody+="<name>unknown</name>";
 		        	newbody+="<status>off</status>";
