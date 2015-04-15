@@ -35,7 +35,7 @@ public class GlobalConfig {
 	private static String CONFIG_FILE = "config.xml";
 
 	private String baseDir;
-	private String mplayerScriptDir;
+	private String ffprobeScriptDir;
 	private String rtmpdumpScriptDir;
 	private Properties config; 
 
@@ -70,14 +70,14 @@ public class GlobalConfig {
 		String os = System.getProperty("os.name").toLowerCase();
 		//running windows
 		if(os.contains("windows")){
-			mplayerScriptDir = baseDir + "scripts" + File.separator + "mp_extract.bat";
+			ffprobeScriptDir = baseDir + "scripts" + File.separator + "ffprobe_extract.bat";
 			rtmpdumpScriptDir = baseDir + "scripts" + File.separator + "rtmpd_extract.bat";
 		}
 		//running linux
 		else{
-			mplayerScriptDir = baseDir + "scripts" + File.separator + "mp_extract.sh";		
+			ffprobeScriptDir = baseDir + "scripts" + File.separator + "ffprobe_extract.sh";		
 			rtmpdumpScriptDir = baseDir + "scripts" + File.separator + "rtmpd_extract.sh";		
-			Chmod.chmodDefault(mplayerScriptDir);
+			Chmod.chmodDefault(ffprobeScriptDir);
 			Chmod.chmodDefault(rtmpdumpScriptDir);
 		}
 		
@@ -88,12 +88,12 @@ public class GlobalConfig {
 		return baseDir;
 	}	
 	
-	public String getMplayerScriptDir(){
-		return mplayerScriptDir;
+	public String getFfprobeScriptDir(){
+		return ffprobeScriptDir;
 	}
 	
-	public String getMplayerPath() {
-		return config.getProperty("mplayer-path");
+	public String getFfprobePath() {
+		return config.getProperty("ffprobe-path");
 	}
 	
 	public String getRtmpdumpScriptDir(){

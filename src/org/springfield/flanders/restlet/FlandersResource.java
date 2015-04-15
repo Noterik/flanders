@@ -38,7 +38,7 @@ import org.restlet.resource.Representation;
 import org.restlet.resource.Resource;
 import org.restlet.resource.StringRepresentation;
 import org.restlet.resource.Variant;
-import org.springfield.flanders.MPlayerMetaDataExtractor;
+import org.springfield.flanders.FfprobeMetaDataExtractor;
 import org.springfield.flanders.MjpegIndexer;
 import org.springfield.flanders.RtmpdumpMetadataExtractor;
 import org.springfield.flanders.homer.LazyHomer;
@@ -150,7 +150,7 @@ public class FlandersResource extends Resource {
 				}
 				String ext = FileHelper.getFileExtension(source);
 				if(ext != null){
-					String response = MPlayerMetaDataExtractor.extractMetaData(source);
+					String response = FfprobeMetaDataExtractor.extractMetaData(source);
 					getResponse().setEntity(new StringRepresentation(response));
 				} else {
 					getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
