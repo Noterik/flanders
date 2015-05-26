@@ -162,14 +162,18 @@ public class FfprobeMetaDataExtractor {
 						}  else if (key.equals("height")) {
 							metaEl = addValue(metaEl, value, "height");
 							height = Integer.parseInt(value);
-						} else if (key.equals("avg_frame_rate")) {
+						} else if (key.equals("r_frame_rate")) {	//for mjpeg avg_frame_rate doesn't work, r_frame_rate seems more suitable
 							String[] parts = value.split("/");
 							if (parts.length == 2) {
-								double framerate = Integer.parseInt(parts[0]) / Integer.parseInt(parts[1]);
-								metaEl = addValue(metaEl, Double.toString(framerate), "framerate");
+								if (Integer.parseInt(parts[1]) == 0) {
+									metaEl = addValue(metaEl, Double.toString(Integer.parseInt(parts[0])), "framerate");
+								} else {
+									double framerate = Integer.parseInt(parts[0]) / Integer.parseInt(parts[1]);
+									metaEl = addValue(metaEl, Double.toString(framerate), "framerate");
+								}
 							} else {
 								metaEl = addValue(metaEl, value, "framerate");
-							}							
+							}														
 						} else if (key.equals("display_aspect_ratio")) {
 							double pixelaspect;
 							
