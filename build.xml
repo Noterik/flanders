@@ -35,17 +35,20 @@
 	  </javac>
 	</target>
 
-	<target name="build" depends="clean,compile">
+	<target name="build" depends="clean,compile,buildtime">
+		<loadfile property="time" srcFile="${web.dir}/build.txt"/>
 		<delete file="${build.dir}/noterik-flanders.jar"/>
 		<jar jarfile="${build.dir}/noterik-flanders.jar" basedir="${classes.dir}">
 			<manifest>
 				<attribute name="Built-By" value="Noterik B.V."/>
 			   	<attribute name="Main-Class" value="org.springfield.flanders.restlet.FlandersRestletApplication"/>
+				<attribute name="Build" value="${time}"/>
 			</manifest>
 		</jar>
 	</target>
 
 	<target name="deploy-war" depends="build">
+		<loadfile property="time" srcFile="${web.dir}/build.txt"/>
 		<copy todir="${web.dir}/WEB-INF/lib/">
 			<fileset dir="${build.dir}">
 				<include name="noterik-flanders.jar"/>
@@ -70,6 +73,10 @@
 			<lib dir="${build.dir}" />
 			<fileset dir="${web.dir}">
 			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="Noterik B.V."/>
+				<attribute name="Build" value="${time}"/>
+			</manifest>
 		</war>
 	</target>
 
@@ -83,5 +90,11 @@
 			</fileset>
 		</copy>
 	</target>
-
+	
+	<target name="buildtime">
+		<tstamp>
+			<format property="time" pattern="yyyy/MM/dd HH:mm:ss" unit="hour"/>
+		</tstamp>
+		<echo file="${web.dir}/build.txt">${time}</echo>
+	</target>
 </project>
