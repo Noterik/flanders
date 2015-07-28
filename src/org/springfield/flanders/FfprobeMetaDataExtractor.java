@@ -298,9 +298,9 @@ public class FfprobeMetaDataExtractor {
 			
 		if(elem == null){
 			metaEl.addElement(type).setText(value);
-		}else if(!value.equals("0") && !value.equals("") && Double.valueOf(value)!= 0.0){
+		}/*else if(!value.equals("0") && !value.equals("") && Double.valueOf(value)!= 0.0){
 			elem.setText(value);
-		}
+		}*/
 				
 		return metaEl;
 	}	
