@@ -21,13 +21,13 @@
 package org.springfield.flanders.restlet;
 
 import org.restlet.Context;
-import org.restlet.Router;
+import org.restlet.routing.Router;
 
 public class FlandersRestlet extends Router {
 
 	public FlandersRestlet(Context cx) {
 		super(cx);
-		this.setRoutingMode(Router.BEST);
+		this.setRoutingMode(Router.MODE_BEST_MATCH);
 		this.attach("/extract",FlandersResource.class);
 		
 		// logging purposes

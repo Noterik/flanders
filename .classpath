@@ -2,20 +2,17 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" output=".deployables/meta-data-manager/WEB-INF/classes" path="src"/>
-	<classpathentry kind="lib" path="lib/com.noelios.restlet.ext.httpclient_3.1.jar"/>
-	<classpathentry kind="lib" path="lib/com.noelios.restlet.ext.net.jar"/>
-	<classpathentry kind="lib" path="lib/com.noelios.restlet.ext.servlet_2.4.jar"/>
-	<classpathentry kind="lib" path="lib/com.noelios.restlet.jar"/>
-	<classpathentry kind="lib" path="lib/noterik-marge.jar"/>
-	<classpathentry kind="lib" path="lib/org.restlet.jar"/>
 	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/jaxen-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/servlet.jar"/>
 	<classpathentry kind="lib" path="lib/org.apache.commons.httpclient.jar"/>
 	<classpathentry kind="lib" path="lib/org.apache.commons.logging.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.14.jar"/>
 	<classpathentry kind="lib" path="lib/org.apache.commons.codec.jar"/>
 	<classpathentry kind="lib" path="lib/mojo.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-1.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.ext.xml.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.ext.servlet.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

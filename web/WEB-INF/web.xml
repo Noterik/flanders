@@ -3,15 +3,6 @@
 
 	<display-name>Flanders: the meta-data extraction service</display-name>
 
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
-		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
-	</welcome-file-list>
-
 	<context-param>
 		<param-name>org.restlet.application</param-name>
 		<param-value>org.springfield.flanders.restlet.FlandersApplication</param-value>
@@ -19,24 +10,17 @@
 
 	<servlet>
 		<servlet-name>ServerServlet</servlet-name>
-		<servlet-class>com.noelios.restlet.ext.servlet.ServerServlet</servlet-class>
+		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	
+	<listener>
+    <listener-class>org.springfield.flanders.restlet.FlandersInitialListener</listener-class>
+  </listener>
 
 	<servlet-mapping>
 		<servlet-name>ServerServlet</servlet-name>
 		<url-pattern>/restlet/*</url-pattern>
 	</servlet-mapping>	
-		
-	<servlet>
-    	<servlet-name>MargeServlet</servlet-name>
-	    <servlet-class>com.noterik.bart.marge.server.MargeServlet</servlet-class>
-	    <load-on-startup>1</load-on-startup>
-	</servlet>
- 
-	<servlet-mapping>
-	    <servlet-name>MargeServlet</servlet-name>
-	    <url-pattern>/marge/*</url-pattern>
-	</servlet-mapping>
 		
 </web-app>

@@ -31,13 +31,15 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 import org.restlet.Context;
 import org.restlet.data.MediaType;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.data.Status;
-import org.restlet.resource.Representation;
-import org.restlet.resource.Resource;
-import org.restlet.resource.StringRepresentation;
-import org.restlet.resource.Variant;
+import org.restlet.representation.Representation;
+import org.restlet.resource.Get;
+import org.restlet.resource.Post;
+import org.restlet.resource.ServerResource;
+import org.restlet.representation.StringRepresentation;
+import org.restlet.representation.Variant;
 import org.springfield.flanders.FfprobeMetaDataExtractor;
 import org.springfield.flanders.MjpegIndexer;
 import org.springfield.flanders.RtmpdumpMetadataExtractor;
@@ -47,7 +49,7 @@ import org.springfield.flanders.tools.FileHelper;
 import org.springfield.mojo.ftp.FtpHelper;
 
 
-public class FlandersResource extends Resource {
+public class FlandersResource extends ServerResource {
 
 	private static Logger log = Logger.getLogger(FlandersResource.class);
 
@@ -60,8 +62,12 @@ public class FlandersResource extends Resource {
 	// the decimal format is used to parse the interval value of the request xml
 	private static DecimalFormat df = new DecimalFormat("#.####");
 
-	public FlandersResource(Context context, Request request, Response response) {
-		super(context, request, response);
+	public FlandersResource() {
+		//constructor
+	}
+	
+	public void doInit(Context context, Request request, Response response) {
+		super.init(context, request, response);
 
 		// add representational variants allowed
 		getVariants().add(new Variant(MediaType.TEXT_XML));
@@ -83,18 +89,16 @@ public class FlandersResource extends Resource {
 	/**
 	 * GET get resource of type modelClass
 	 */
-	@Override
-	public Representation getRepresentation(Variant variant) {
+	@Get
+	public void handleGet() {
 		Representation result = null;
-		if (variant.getMediaType().equals(MediaType.TEXT_XML)) {
-			result = new StringRepresentation("GET this...");
-		}
+		result = new StringRepresentation("GET this...");
 
-		return result;
+		getResponse().setEntity(result);
 	}
 
-	@Override
-	public void post(Representation representation){
+	@Post
+	public void handlePost(Representation representation){
 		String xml = "";
 		log.error("entering the POST!!!!!");
 		try {
