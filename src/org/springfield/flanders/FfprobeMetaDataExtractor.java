@@ -48,6 +48,7 @@ import org.springfield.flanders.tools.HttpHelper;
 public class FfprobeMetaDataExtractor {	
 	private static String tempFolder;	
 	private static String STREAM_REGEX = "\\[STREAM\\](.*?)\\[\\/STREAM]";
+	private static String FORMAT_REGEX = "\\[FORMAT\\](.*?)\\[\\/FORMAT]";
 
 	public static String extractMetaData(String source) {
 		FlandersProperties fp = LazyHomer.getMyFlandersProperties();
@@ -196,6 +197,23 @@ public class FfprobeMetaDataExtractor {
 							}						
 						} else if (key.equals("duration")) {
 							System.out.println("DURATION: " + value);
+							if (value.equals("N/A")) {
+								//could happen with MKV video
+								Pattern pformat = Pattern.compile(FORMAT_REGEX, Pattern.DOTALL | Pattern.MULTILINE);
+								Matcher mformat = pformat.matcher(file);
+								if (mformat.find()) {
+									String formatGroup = mformat.group(0);
+									String[] formatLines = formatGroup.split("\n");
+									
+									for (int j = 0; j < formatLines.length; j++) {
+										String l = formatLines[j];
+										if (l.startsWith("duration=")) {
+											value = l.substring(l.indexOf("=")+1);
+											System.out.println("DURATION: " + value);
+										}
+									}
+								}
+							}
 							dur = Double.valueOf(value);						
 							metaEl = addValue(metaEl, dur + "", "duration");
 						} 
