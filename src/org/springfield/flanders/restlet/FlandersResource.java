@@ -100,7 +100,7 @@ public class FlandersResource extends ServerResource {
 	@Post
 	public void handlePost(Representation representation){
 		String xml = "";
-		log.error("entering the POST!!!!!");
+		log.info("entering the POST!!!!!");
 		try {
 			if (representation == null) {
 				getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
