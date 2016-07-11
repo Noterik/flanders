@@ -125,7 +125,7 @@ public class LazyHomer implements MargeObserver {
 			
 			// we are verified (has a name other than unknown) and status is on
 			FlandersProperties fp = flanders.get(myip);
-			setLogLevel(fp.getDefaultLogLevel());
+			//setLogLevel(fp.getDefaultLogLevel());
 			if (fp!=null && fp.getStatus().equals("on")) {
 				if (serv==null) serv = new FlandersServer();
 				if (!serv.isRunning()) {
@@ -375,7 +375,7 @@ public class LazyHomer implements MargeObserver {
 						LOG.info("This flanders will be started");
 						serv.init();
 					}
-					setLogLevel(mp.getDefaultLogLevel());
+					//setLogLevel(mp.getDefaultLogLevel());
 				} else {
 					if (serv.isRunning()) {
 						LOG.info("This flanders will be turned off");
