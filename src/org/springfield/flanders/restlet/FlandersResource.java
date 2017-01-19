@@ -40,7 +40,9 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
+import org.springfield.flanders.CineExtractor;
 import org.springfield.flanders.FfprobeMetaDataExtractor;
+import org.springfield.flanders.IdtRawExtractor;
 import org.springfield.flanders.MjpegIndexer;
 import org.springfield.flanders.RtmpdumpMetadataExtractor;
 import org.springfield.flanders.homer.LazyHomer;
@@ -153,8 +155,14 @@ public class FlandersResource extends ServerResource {
 					}
 				}
 				String ext = FileHelper.getFileExtension(source);
-				if(ext != null){
-					String response = FfprobeMetaDataExtractor.extractMetaData(source);
+				if(ext != null && ext.toLowerCase().equals("raw")){
+				    	String response = IdtRawExtractor.extractMetaData(source);
+					getResponse().setEntity(new StringRepresentation(response));
+				} else if(ext != null && ext.toLowerCase().equals("cine")) { 
+				    	String response = CineExtractor.extractMetaData(source);
+					getResponse().setEntity(new StringRepresentation(response));
+				}else if (ext != null) {
+				    	String response = FfprobeMetaDataExtractor.extractMetaData(source);
 					getResponse().setEntity(new StringRepresentation(response));
 				} else {
 					getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);

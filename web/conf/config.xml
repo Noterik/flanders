@@ -4,4 +4,6 @@
 	<comment>Config for Flanders (the meta-data extraction service)</comment>
 	<entry key="rtmpdump-path">/usr/bin</entry>
 	<entry key="ffprobe-path">/usr/bin</entry>
+	<entry key="idt_raw-path">/usr/bin</entry>
+	<entry key="cine-path">/usr/bin</entry>
 </properties>

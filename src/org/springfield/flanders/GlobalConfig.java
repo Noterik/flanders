@@ -37,6 +37,8 @@ public class GlobalConfig {
 	private String baseDir;
 	private String ffprobeScriptDir;
 	private String rtmpdumpScriptDir;
+	private String idtrawScriptDir;
+	private String cineScriptDir;
 	private Properties config; 
 
 	/**
@@ -76,11 +78,14 @@ public class GlobalConfig {
 		//running linux
 		else{
 			ffprobeScriptDir = baseDir + "scripts" + File.separator + "ffprobe_extract.sh";		
-			rtmpdumpScriptDir = baseDir + "scripts" + File.separator + "rtmpd_extract.sh";		
+			rtmpdumpScriptDir = baseDir + "scripts" + File.separator + "rtmpd_extract.sh";	
+			idtrawScriptDir = baseDir + "scripts" + File.separator + "idt_raw_extract.sh";
+			cineScriptDir = baseDir + "scripts" + File.separator + "cine_extract.sh";
 			Chmod.chmodDefault(ffprobeScriptDir);
 			Chmod.chmodDefault(rtmpdumpScriptDir);
-		}
-		
+			Chmod.chmodDefault(idtrawScriptDir);
+			Chmod.chmodDefault(cineScriptDir);
+		}		
 		initConfig();
 	}
 	
@@ -103,5 +108,21 @@ public class GlobalConfig {
 	public String getRtmpdumpPath() {
 		return config.getProperty("rtmpdump-path");
 	}
+	
+	public String getIdtRawScriptDir() {
+	    return idtrawScriptDir;
+	}
+	
+	public String getIdtRawPath() {
+	    return config.getProperty("idt_raw-path");
+	}
+	
+	public String getCineScriptDir() {
+	    return cineScriptDir;
+	}
 
+	public String getCinePath() {
+	    return config.getProperty("cine-path");
+	}
+	
 }

@@ -78,8 +78,8 @@ public class FfprobeMetaDataExtractor {
 			System.out.println("-- FINISHED WITH THE COMMAND --");
 			return getResponseStringFromMPlayerTempFile(metadataFile, source);			
 		} else {
-			return HttpHelper.getErrorMessageAsString("500", "Could not construct the command for mplayer",
-					"ERROR: could not construct the command for mplayer",
+			return HttpHelper.getErrorMessageAsString("500", "Could not construct the command for ffprobe",
+					"ERROR: could not construct the command for ffprobe",
 					"http://teamelements.noterik.com/team");
 		}
 	}
