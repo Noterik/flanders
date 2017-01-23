@@ -156,9 +156,11 @@ public class FlandersResource extends ServerResource {
 				}
 				String ext = FileHelper.getFileExtension(source);
 				if(ext != null && ext.toLowerCase().equals("raw")){
+				    	log.info("FOUND RAW EXTENSION");
 				    	String response = IdtRawExtractor.extractMetaData(source);
 					getResponse().setEntity(new StringRepresentation(response));
 				} else if(ext != null && ext.toLowerCase().equals("cine")) { 
+				    	log.info("FOUND CINE EXTENSION");	
 				    	String response = CineExtractor.extractMetaData(source);
 					getResponse().setEntity(new StringRepresentation(response));
 				}else if (ext != null) {

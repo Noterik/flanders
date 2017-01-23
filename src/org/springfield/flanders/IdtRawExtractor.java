@@ -103,16 +103,12 @@ public class IdtRawExtractor {
 	BufferedReader reader = new BufferedReader(tempMetadataFile);
 	long br = 0;
 	double dur = 0;
-	int width = 0;
-	int height = 0;
 	int fps = 0;
 		
 	try {
 	    String line = reader.readLine();
 			
 	    while (line != null) {
-		line = reader.readLine();
-		
 		 int term = line.indexOf('=');
 		 if (term != -1) {
 		     String key = line.substring(0, term);
@@ -123,14 +119,14 @@ public class IdtRawExtractor {
 			 fps = Integer.parseInt(value);
 		     } else if (key.toLowerCase().equals("width")) {
 			 metaEl = addValue(metaEl, value, "width");
-			 width = Integer.parseInt(value);
 		     } else if (key.toLowerCase().equals("height")) {
-			 height = Integer.parseInt(value);
+			 metaEl = addValue(metaEl, value, "width");
 		     } else if (key.toLowerCase().equals("number_of_frames")) {
 			 dur = ((double) Integer.parseInt(value)) / ((double) fps);
 			 metaEl = addValue(metaEl, dur + "", "duration");
 		     }
 		 }
+		 line = reader.readLine();
 	    }
 	} catch (IOException e) {
 	    xml = HttpHelper.getErrorMessageAsString("500", "idt_raw could not save the meta-data to a file",

@@ -107,26 +107,24 @@ public class CineExtractor {
 		
 	try {
 	    String line = reader.readLine();
-			
+	    
 	    while (line != null) {
-		line = reader.readLine();
-		
-		 int term = line.indexOf(':');
+		int term = line.indexOf(':');
 		 if (term != -1) {
 		     String key = line.substring(0, term);
 		     String value = line.substring(term + 1, line.length());
 		     
-		     if (key.toLowerCase().equals("Shutter")) {
+		     if (key.equals("Shutter")) {
 			 fps = parseFramerate(value);
 			 metaEl = addValue(metaEl, Double.toString(fps), "framerate");
-			 fps = Integer.parseInt(value);
-		     } else if (key.toLowerCase().equals("Image size")) {
+		     } else if (key.equals("Image size")) {
 			 metaEl = setImageSize(value, metaEl);
-		     } else if (key.toLowerCase().equals("Number of raw images")) {
+		     } else if (key.equals("Number of raw images")) {
 			 dur = ((double) Integer.parseInt(value.trim())) /  fps;
 			 metaEl = addValue(metaEl, dur + "", "duration");
 		     }
 		 }
+		 line = reader.readLine();
 	    }
 	} catch (IOException e) {
 	    xml = HttpHelper.getErrorMessageAsString("500", "dcraw could not save the meta-data to a file",
@@ -242,6 +240,7 @@ public class CineExtractor {
     private static double parseFramerate(String line) {
 	line = line.trim();
 	String[] parts1 = line.split(" ");
+	
 	if (parts1.length != 2) {
 		return 0.0;
 	}
