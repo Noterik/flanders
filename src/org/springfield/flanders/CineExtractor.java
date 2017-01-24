@@ -114,10 +114,12 @@ public class CineExtractor {
 		     String key = line.substring(0, term);
 		     String value = line.substring(term + 1, line.length());
 		     
-		     if (key.equals("Shutter")) {
+		     System.out.println("key = "+key+" val = "+value);
+		     
+		     if (key.equals("Shutter") || key.equals("Sluiter")) {
 			 fps = parseFramerate(value);
 			 metaEl = addValue(metaEl, Double.toString(fps), "framerate");
-		     } else if (key.equals("Image size")) {
+		     } else if (key.equals("Image size") || key.equals("Afmetingen van de afbeelding")) {
 			 metaEl = setImageSize(value, metaEl);
 		     } else if (key.equals("Number of raw images")) {
 			 dur = ((double) Integer.parseInt(value.trim())) /  fps;
