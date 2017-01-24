@@ -155,20 +155,17 @@ public class FlandersResource extends ServerResource {
 					}
 				}
 				String ext = FileHelper.getFileExtension(source);
-				if(ext != null && ext.toLowerCase().equals("raw")){
+				if(ext == null){ //assume folder with raw idt video
 				    	log.info("FOUND RAW EXTENSION");
 				    	String response = IdtRawExtractor.extractMetaData(source);
 					getResponse().setEntity(new StringRepresentation(response));
-				} else if(ext != null && ext.toLowerCase().equals("cine")) { 
+				} else if(ext.toLowerCase().equals("cine")) { 
 				    	log.info("FOUND CINE EXTENSION");	
 				    	String response = CineExtractor.extractMetaData(source);
 					getResponse().setEntity(new StringRepresentation(response));
-				}else if (ext != null) {
+				}else {
 				    	String response = FfprobeMetaDataExtractor.extractMetaData(source);
 					getResponse().setEntity(new StringRepresentation(response));
-				} else {
-					getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-					getResponse().setEntity("<status>Error: incorrect parameters</status>", MediaType.TEXT_XML);
 				}
 			} else if(stream!=null && filename!=null) {
 				String response = RtmpdumpMetadataExtractor.extractMetaData(stream,filename);

@@ -120,7 +120,7 @@ public class IdtRawExtractor {
 		     } else if (key.toLowerCase().equals("width")) {
 			 metaEl = addValue(metaEl, value, "width");
 		     } else if (key.toLowerCase().equals("height")) {
-			 metaEl = addValue(metaEl, value, "width");
+			 metaEl = addValue(metaEl, value, "height");
 		     } else if (key.toLowerCase().equals("number_of_frames")) {
 			 dur = ((double) Integer.parseInt(value)) / ((double) fps);
 			 metaEl = addValue(metaEl, dur + "", "duration");
