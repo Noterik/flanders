@@ -145,12 +145,18 @@ public class FlandersResource extends ServerResource {
 					if (mp.getProtocol().equals("file")) {
 						source = mp.getPath() + source;	
 					} else if (mp.getProtocol().equals("ftp")) {
-						/** get the video file from streaming machines to the the flanders server */	
+						/** get the file from streaming machines to the the flanders server */	
 						String fileName = source.substring(source.lastIndexOf("/")+1);
 						String rawUri = source.substring(0,source.lastIndexOf("/"));
-						String vidUri = rawUri.substring(0, rawUri.lastIndexOf("/rawvideo/")+1);
-						if(getVideoByFtp(mp.getHostname(), mp.getAccount(), mp.getPassword(), fileName, mp.getPath(), rawUri, vidUri)){
-							source = mp.getPath()+vidUri+File.separator+fileName;
+						String itemUri;
+						if (rawUri.indexOf("/rawaudio/") > -1) {
+						    itemUri = rawUri.substring(0, rawUri.lastIndexOf("/rawaudio/")+1);
+						} else {
+						    itemUri = rawUri.substring(0, rawUri.lastIndexOf("/rawvideo/")+1);
+						}
+					
+						if(getFileByFtp(mp.getHostname(), mp.getAccount(), mp.getPassword(), fileName, mp.getPath(), rawUri, itemUri)){
+							source = mp.getPath()+itemUri+File.separator+fileName;
 						}
 					}
 				}
@@ -178,19 +184,19 @@ public class FlandersResource extends ServerResource {
 	}
 	
 	/**
-	 * This function copies the video file from the streaming machine into the flanders server where the metadata
+	 * This function copies the file from the streaming machine into the flanders server where the metadata
 	 * is extracted.
 	 * 
 	 * @param server
 	 * @param fileName
 	 * @param mount
 	 * @param rawUri
-	 * @param vidUri
+	 * @param itemUri
 	 * @return
 	 */
-	 private boolean getVideoByFtp(String server, String username, String password, String fileName, String mount, String rawUri, String vidUri){
+	 private boolean getFileByFtp(String server, String username, String password, String fileName, String mount, String rawUri, String itemUri){
 		 String rFolder = rawUri;
-		 String lFolder = mount + vidUri;
+		 String lFolder = mount + itemUri;
 		 
 		 // retry on failure
 		 boolean success = false;
@@ -204,10 +210,8 @@ public class FlandersResource extends ServerResource {
 			 try {
 				Thread.sleep(TIME_TO_WAIT);
 			} catch (InterruptedException e) {}
-		 }
-		 
+		 }		 
 		 // FTP
 		 return success;
 	 }
-
 }

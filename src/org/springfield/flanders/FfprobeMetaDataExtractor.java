@@ -108,6 +108,7 @@ public class FfprobeMetaDataExtractor {
 		long br = 0;
 		long abr = 0;
 		double dur = 0;
+		double audiodur = 0;
 		int width = 0;
 		int height = 0;
 		
@@ -239,6 +240,9 @@ public class FfprobeMetaDataExtractor {
 							metaEl = addValue(metaEl, value, "samplerate");				
 						} else if (key.equals("channels")) {
 							metaEl = addValue(metaEl, value, "audiochannels");
+						} else if (key.equals("duration")) {
+						    audiodur = Double.valueOf(value);						
+						    metaEl = addValue(metaEl, audiodur + "", "audioduration");
 						}
 					}
 				}
@@ -253,6 +257,16 @@ public class FfprobeMetaDataExtractor {
 			if((int)dur != 0)
 				br = fs / (int)dur - abr;
 			metaEl = addValue(metaEl, br + "", "videobitrate");
+		} else if (audiodur > 0) {
+		    metaEl = addValue(metaEl, audiodur + "", "duration");
+		    
+		    System.out.println("Calculating audio bitrate");
+		    File f = new File(source);
+			long fs = f.length() * 8;
+			System.out.println("size: " + fs + " duration: " + (int)dur);
+			if((int)dur != 0)
+				br = fs / (int)dur;
+			metaEl = addValue(metaEl, br + "", "audiobitrate");		    
 		}
 		
 		metaEl.addElement("metadata_file").setText(path);

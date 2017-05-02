@@ -3,7 +3,7 @@
 
 ECHO Ffprobe: %1
 
-ECHO Video file: %2
+ECHO Media file: %2
 
 ECHO MetaData file: %3
 
