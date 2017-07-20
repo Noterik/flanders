@@ -90,7 +90,9 @@ public class FfprobeMetaDataExtractor {
 	 * @return
 	 */
 	private static String getResponseStringFromMPlayerTempFile(String path, String source) {
-		FileReader tempMetadataFile = null;
+		source = source.trim();
+	    
+	    	FileReader tempMetadataFile = null;
 		//String xml = "<meta-data>";
 		String xml = "";
 		System.out.println("file is: " + path);
@@ -230,25 +232,33 @@ public class FfprobeMetaDataExtractor {
 						String key = line.substring(0, term);
 						String value = line.substring(term + 1, line.length());
 						
-						if (key.equals("codec_tag_string")) {						
+						if (key.equals("codec_name")) {						
 							metaEl = addValue(metaEl, value, "audiocodec");
 						} else if (key.equals("bit_rate")) {
 							System.out.println("ABR: " + value);
-							abr = new Long(value).longValue();
-							metaEl = addValue(metaEl, value, "audiobitrate");
+							if (value.equals("N/A")) {
+							    abr = 0l;
+							} else {
+							    abr = new Long(value).longValue();
+							}
+							metaEl = addValue(metaEl, abr + "", "audiobitrate");
 						} else if (key.equals("sample_rate")) {						
 							metaEl = addValue(metaEl, value, "samplerate");				
 						} else if (key.equals("channels")) {
 							metaEl = addValue(metaEl, value, "audiochannels");
 						} else if (key.equals("duration")) {
-						    audiodur = Double.valueOf(value);						
+						    if (value.equals("N/A")) {
+							audiodur = dur;
+						    } else {
+							audiodur = Double.valueOf(value);						
+						    }
 						    metaEl = addValue(metaEl, audiodur + "", "audioduration");
 						}
 					}
 				}
 			}			
 		}
-		
+
 		if(dur > 0) {
 			System.out.println("Calculating video bitrate");
 			File f = new File(source);
