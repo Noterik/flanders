@@ -172,8 +172,9 @@ public class FfprobeMetaDataExtractor {
 								if (Integer.parseInt(parts[1]) == 0) {
 									metaEl = addValue(metaEl, Double.toString(Integer.parseInt(parts[0])), "framerate");
 								} else {
-									double framerate = Integer.parseInt(parts[0]) / Integer.parseInt(parts[1]);
-									metaEl = addValue(metaEl, Double.toString(framerate), "framerate");
+									double framerate = Integer.parseInt(parts[0]) * 1.0 / Integer.parseInt(parts[1]);
+									
+									metaEl = addValue(metaEl, String.valueOf(framerate), "framerate");
 								}
 							} else {
 								metaEl = addValue(metaEl, value, "framerate");
