@@ -1,7 +1,5 @@
 *.class
 
-*.war
-
 *.jar
 
 web/build.txt
