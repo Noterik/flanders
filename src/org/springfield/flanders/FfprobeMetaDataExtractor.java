@@ -182,13 +182,17 @@ public class FfprobeMetaDataExtractor {
 						} else if (key.equals("display_aspect_ratio")) {
 							double pixelaspect;
 							
-							String[] parts = value.split(":");
-							if (parts.length == 2) {
-								pixelaspect = Integer.parseInt(parts[0]) *1.0 / Integer.parseInt(parts[1]);
-								metaEl = addValue(metaEl, Double.toString(pixelaspect), "pixelaspect");
-							} else {
-								metaEl = addValue(metaEl, value, "pixelaspect");
-								pixelaspect = Double.parseDouble(value);
+							if (value.equals("N/A")) {
+								pixelaspect = 0.0;
+							} else {							
+								String[] parts = value.split(":");
+								if (parts.length == 2) {
+									pixelaspect = Integer.parseInt(parts[0]) *1.0 / Integer.parseInt(parts[1]);
+									metaEl = addValue(metaEl, Double.toString(pixelaspect), "pixelaspect");
+								} else {
+									metaEl = addValue(metaEl, value, "pixelaspect");
+									pixelaspect = Double.parseDouble(value);
+								}
 							}
 
 							if (pixelaspect != 0.0) {
