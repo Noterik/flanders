@@ -4,13 +4,13 @@
 	<display-name>Flanders: the meta-data extraction service</display-name>
 
 	<context-param>
-		<param-name>org.restlet.application</param-name>
+		<param-name>org.restlet.alternative.application</param-name>
 		<param-value>org.springfield.flanders.restlet.FlandersApplication</param-value>
 	</context-param>
 
 	<servlet>
 		<servlet-name>ServerServlet</servlet-name>
-		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+		<servlet-class>org.restlet.alternative.ext.servlet.ServerServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	

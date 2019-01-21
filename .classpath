@@ -11,8 +11,8 @@
 	<classpathentry kind="lib" path="lib/mojo.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-1.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/javax.servlet.jar"/>
-	<classpathentry kind="lib" path="lib/org.restlet.ext.xml.jar"/>
-	<classpathentry kind="lib" path="lib/org.restlet.jar"/>
-	<classpathentry kind="lib" path="lib/org.restlet.ext.servlet.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.alternative.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.alternative.ext.servlet.jar"/>
+	<classpathentry kind="lib" path="lib/org.restlet.alternative.ext.xml.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

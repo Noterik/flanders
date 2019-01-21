@@ -20,8 +20,8 @@
 */
 package org.springfield.flanders.restlet;
 
-import org.restlet.Context;
-import org.restlet.routing.Router;
+import org.restlet.alternative.Context;
+import org.restlet.alternative.routing.Router;
 
 public class FlandersRestlet extends Router {
 

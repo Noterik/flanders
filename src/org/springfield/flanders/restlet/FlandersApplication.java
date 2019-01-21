@@ -22,10 +22,10 @@ package org.springfield.flanders.restlet;
 
 import javax.servlet.ServletContext;
 
-import org.restlet.Application;
-import org.restlet.Component;
-import org.restlet.Context;
-import org.restlet.Restlet;
+import org.restlet.alternative.Application;
+import org.restlet.alternative.Component;
+import org.restlet.alternative.Context;
+import org.restlet.alternative.Restlet;
 import org.springfield.flanders.GlobalConfig;
 import org.springfield.flanders.homer.LazyHomer;
 

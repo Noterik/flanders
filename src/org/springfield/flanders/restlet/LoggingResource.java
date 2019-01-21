@@ -22,16 +22,16 @@ package org.springfield.flanders.restlet;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.restlet.Context;
-import org.restlet.data.Form;
-import org.restlet.data.MediaType;
-import org.restlet.Request;
-import org.restlet.Response;
-import org.restlet.representation.Representation;
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
-import org.restlet.representation.StringRepresentation;
-import org.restlet.representation.Variant;
+import org.restlet.alternative.Context;
+import org.restlet.alternative.data.Form;
+import org.restlet.alternative.data.MediaType;
+import org.restlet.alternative.Request;
+import org.restlet.alternative.Response;
+import org.restlet.alternative.representation.Representation;
+import org.restlet.alternative.resource.Get;
+import org.restlet.alternative.resource.ServerResource;
+import org.restlet.alternative.representation.StringRepresentation;
+import org.restlet.alternative.representation.Variant;
 import org.springfield.flanders.FlandersServer;
 
 /**
