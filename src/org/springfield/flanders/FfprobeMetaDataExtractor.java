@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
@@ -49,6 +50,7 @@ public class FfprobeMetaDataExtractor {
 	private static String tempFolder;	
 	private static String STREAM_REGEX = "\\[STREAM\\](.*?)\\[\\/STREAM]";
 	private static String FORMAT_REGEX = "\\[FORMAT\\](.*?)\\[\\/FORMAT]";
+	private static String ERROR_REGEX = "(?m)(^.*)](?<errorgroup>(.*)(error.*))$";
 
 	public static String extractMetaData(String source) {
 		FlandersProperties fp = LazyHomer.getMyFlandersProperties();
@@ -71,12 +73,14 @@ public class FfprobeMetaDataExtractor {
 		arg2 = source.replace("\n", "");
 		arg3 = metadataFile.replace("\n", "");		
 		System.out.println("Command is: ");		
-		System.out.println(cmd + " " + arg1 + " " + arg2 + " " + arg3);				
+		System.out.println(cmd + " " + arg1 + " " + arg2 + " " + arg3);		
+		CommandOutput commandOutput;
 		if (source != null && !source.equals("") && metadataFile != null && !metadataFile.equals("")) {
 			System.out.println("-- ABOUT TO RUN THE COMMAND --");
-			commandRunner(cmd, arg1, arg2, arg3);			
+			commandOutput = commandRunner(cmd, arg1, arg2, arg3);			
 			System.out.println("-- FINISHED WITH THE COMMAND --");
-			return getResponseStringFromMPlayerTempFile(metadataFile, source);			
+			System.out.println("-- EXIT CODE "+ commandOutput.exitCode +" --");
+			return getResponseStringFromMPlayerTempFile(metadataFile, source, commandOutput);			
 		} else {
 			return HttpHelper.getErrorMessageAsString("500", "Could not construct the command for ffprobe",
 					"ERROR: could not construct the command for ffprobe",
@@ -89,7 +93,7 @@ public class FfprobeMetaDataExtractor {
 	 * @param path
 	 * @return
 	 */
-	private static String getResponseStringFromMPlayerTempFile(String path, String source) {
+	private static String getResponseStringFromMPlayerTempFile(String path, String source, CommandOutput output) {
 		source = source.trim();
 	    
 	    	FileReader tempMetadataFile = null;
@@ -263,6 +267,55 @@ public class FfprobeMetaDataExtractor {
 				}
 			}			
 		}
+		
+		//check for errors during ffprobe processing
+		p = Pattern.compile(ERROR_REGEX, Pattern.CASE_INSENSITIVE);
+		m = p.matcher(output.outputString);
+		ArrayList<String> errors = new ArrayList<String>(10);
+		
+		int z = 1;
+		
+		while (m.find()) {			
+			String group = m.group("errorgroup");
+			errors.add(group.trim());
+			System.out.println("Error "+z+": "+group);
+			z++;
+		}
+		
+		if (errors.size() > 0) {
+			System.out.println("Error detected in ffprobe output");
+			StringBuilder sb = new StringBuilder();
+			for (String s : errors)
+			{
+			    sb.append(s.trim());
+			    sb.append("\r\n");
+			}
+			
+			metaEl = addValue(metaEl, sb.toString(), "error");
+		}
+		
+		//check for errors in exit code
+		if (output.exitCode < 0) {
+			System.out.println("FFprobe returned error code");
+			String lines[] = output.outputString.split("\n");
+			String error = lines[lines.length - 1];
+			if (error.indexOf(":") > 0) {
+				error = error.substring(error.indexOf(":")+1);
+			}
+			metaEl = addValue(metaEl, error, "error");
+		}
+		
+		//also when no fields are present, give last output off ffprobe
+		if (metaEl.numberValueOf("count(child::*)").intValue() == 0) {
+			System.out.println("No suitable ffprobe output detected");
+			String lines[] = output.outputString.split("\n");
+			String error = lines[lines.length - 1];
+			if (error.indexOf(":") > 0) {
+				error = error.substring(error.indexOf(":")+1);
+			}
+			metaEl = addValue(metaEl, error.trim(), "error");
+		}
+
 
 		if(dur > 0) {
 			System.out.println("Calculating video bitrate");
@@ -357,7 +410,7 @@ public class FfprobeMetaDataExtractor {
 	 *
 	 * @param comand
 	 */
-	private static void commandRunner(String cmd, String arg1, String arg2, String arg3) {
+	private static CommandOutput commandRunner(String cmd, String arg1, String arg2, String arg3) {
 		
 		ProcessBuilder pb = new ProcessBuilder(cmd, arg1, arg2, arg3);
 		pb.redirectErrorStream(true);
@@ -367,13 +420,36 @@ public class FfprobeMetaDataExtractor {
 			InputStream in = p.getInputStream();
 			
 			int c;
+			StringBuffer output = new StringBuffer();
 			while ((c = in.read()) != -1) {
+				output.append((char) c);
 				System.out.print((char) c);
 			}
 			in.close();
+
+			p.waitFor();
+			
+			CommandOutput outputObj = new CommandOutput(output.toString(), p.exitValue());
+			
+			return outputObj;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
+		CommandOutput outputObj = new CommandOutput("no output", -1);
+		
+		return outputObj;
+	}
+}
+
+class CommandOutput {
+	String outputString;
+	int exitCode;
+	
+	public CommandOutput(String outputString, int exitCode) {
+		this.outputString = outputString;
+		this.exitCode = exitCode;
 	}
 }
