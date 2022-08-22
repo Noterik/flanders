@@ -1,23 +1,3 @@
-/* 
-* IdtRawExtractor.java
-* 
-* Copyright (c) 2017 Noterik B.V.
-* 
-* This file is part of flanders-git, related to the Noterik Springfield project.
-*
-* flanders-git is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* flanders-git is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with flanders-git.  If not, see <http://www.gnu.org/licenses/>.
-*/
 package org.springfield.flanders;
 
 import java.io.BufferedReader;
@@ -35,18 +15,10 @@ import org.springfield.flanders.homer.FlandersProperties;
 import org.springfield.flanders.homer.LazyHomer;
 import org.springfield.flanders.tools.HttpHelper;
 
-/**
- * IdtRawExtractor.java
- *
- * @author Pieter van Leeuwen
- * @copyright Copyright: Noterik B.V. 2017
- * @package org.springfield.flanders
- * 
- */
-public class IdtRawExtractor {
-    private static String tempFolder;
-    
-    public static String extractMetaData(String source) {
+public class MrawExtractor {
+	private static String tempFolder;
+	
+	public static String extractMetaData(String source) {
 		FlandersProperties fp = LazyHomer.getMyFlandersProperties();
 		tempFolder = fp.getTemporaryDirectory();
 		
@@ -79,6 +51,80 @@ public class IdtRawExtractor {
 			    "http://teamelements.noterik.com/team");
 		}
     }
+	
+	/**
+     * depending on the operating system, this function will create the file name/location
+     * for the temporary metadata file
+     * 
+     * @return String metadata filename
+     */
+    public static String buildFileName(){	
+		Calendar cal = new GregorianCalendar();
+		
+		long stamp = cal.getTimeInMillis();
+		
+		System.out.println(stamp);
+		String path = "";
+		String fileName = "";
+		
+		String opSys = System.getProperty("os.name").toLowerCase();
+		
+		//running in windows
+		if(opSys.contains("windows")){
+			path = "c:" + tempFolder.replace('/', File.separatorChar);
+			fileName = path + File.separatorChar + stamp + ".dat";
+			boolean success = (new File(path)).mkdirs();
+		}
+		//running in linux
+		else{    		
+		    fileName = tempFolder + "/" + stamp + ".dat";
+		    boolean success = (new File(tempFolder)).mkdirs();
+		}   	
+		
+		return fileName;
+    }
+    
+    /**
+     * Runs the command passed as parameter
+     *
+     * @param comand
+     */
+    private static void commandRunner(String cmd, String arg1, String arg2, String arg3) {
+		ProcessBuilder pb = new ProcessBuilder(cmd, arg1, arg2, arg3);
+		pb.redirectErrorStream(true);
+			
+		try {
+		    Process p = pb.start();
+		    InputStream in = p.getInputStream();
+				
+		    int c;
+		    while ((c = in.read()) != -1) {
+			System.out.print((char) c);
+		    }
+		    in.close();
+		} catch (IOException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		}
+    }
+    
+    /**
+     * @param metaEl
+     * @param value
+     * @param type
+     * @return
+     */
+    public static Element addValue(Element metaEl, String value, String type){
+	Element elem = (Element)metaEl.selectSingleNode(type);
+			
+	if(elem == null){
+		metaEl.addElement(type).setText(value);
+	}/*else if(!value.equals("0") && !value.equals("") && Double.valueOf(value)!= 0.0){
+		elem.setText(value);
+	}*/
+			
+	return metaEl;
+    }	
     
     /**
      * given the location of the metadata file 
@@ -166,78 +212,5 @@ public class IdtRawExtractor {
 		
 	return xml;
     }
-    
-    /**
-     * depending on the operating system, this function will create the file name/location
-     * for the temporary metadata file
-     * 
-     * @return String metadata filename
-     */
-    public static String buildFileName(){	
-	Calendar cal = new GregorianCalendar();
 	
-	long stamp = cal.getTimeInMillis();
-	
-	System.out.println(stamp);
-	String path = "";
-	String fileName = "";
-	
-	String opSys = System.getProperty("os.name").toLowerCase();
-	
-	//running in windows
-	if(opSys.contains("windows")){
-		path = "c:" + tempFolder.replace('/', File.separatorChar);
-		fileName = path + File.separatorChar + stamp + ".dat";
-		boolean success = (new File(path)).mkdirs();
-	}
-	//running in linux
-	else{    		
-	    fileName = tempFolder + "/" + stamp + ".dat";
-	    boolean success = (new File(tempFolder)).mkdirs();
-	}   	
-	
-	return fileName;
-    }
-    
-    /**
-     * @param metaEl
-     * @param value
-     * @param type
-     * @return
-     */
-    public static Element addValue(Element metaEl, String value, String type){
-	Element elem = (Element)metaEl.selectSingleNode(type);
-			
-	if(elem == null){
-		metaEl.addElement(type).setText(value);
-	}/*else if(!value.equals("0") && !value.equals("") && Double.valueOf(value)!= 0.0){
-		elem.setText(value);
-	}*/
-			
-	return metaEl;
-    }	
-    
-    /**
-     * Runs the command passed as parameter
-     *
-     * @param comand
-     */
-    private static void commandRunner(String cmd, String arg1, String arg2, String arg3) {
-	ProcessBuilder pb = new ProcessBuilder(cmd, arg1, arg2, arg3);
-	pb.redirectErrorStream(true);
-		
-	try {
-	    Process p = pb.start();
-	    InputStream in = p.getInputStream();
-			
-	    int c;
-	    while ((c = in.read()) != -1) {
-		System.out.print((char) c);
-	    }
-	    in.close();
-	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-    }
 }
